@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Comprar Seguidores</title>
+<style>
+body { font-family: Arial; background:#f2f2f2; padding:20px }
+.box { background:#fff; padding:20px; max-width:400px; margin:auto; border-radius:10px }
+button { width:100%; padding:12px; background:#00a859; color:#fff; border:none }
+textarea { width:100%; height:90px }
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Comprar Seguidores</h2>
+
+  <select id="service">
+    <option value="101">Instagram Seguidores</option>
+  </select>
+
+  <input id="link" placeholder="Link do perfil" style="width:100%;margin:5px 0">
+  <input id="quantity" type="number" value="1000" style="width:100%;margin:5px 0">
+
+  <button onclick="pagar()">Pagar com Pix</button>
+
+  <div id="pix"></div>
+</div>
+
+<script>
+async function pagar() {
+  const res = await fetch('/.netlify/functions/api?action=criar_pix', {
+    method: 'POST',
+    body: JSON.stringify({
+      service: service.value,
+      link: link.value,
+      quantity: quantity.value
+    })
+  });
+
+  const data = await res.json();
+
+  document.getElementById('pix').innerHTML = `
+    <p><b>Pix Copia e Cola</b></p>
+    <textarea>${data.pix}</textarea>
+    <p>Aguardando pagamento...</p>
+  `;
+}
+</script>
+
+</body>
+</html>
